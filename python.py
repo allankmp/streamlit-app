@@ -52,6 +52,9 @@ def area_media_imoveis(data):
     area = data['área'].mean()    
     return area
 
+def checar_filtro_na_lista(lista, string):
+    return [string in item for item in lista]
+
 @st.dialog("Escolha o filtro")
 def escolher_filtro():
     filtro = st.selectbox(
@@ -141,7 +144,7 @@ def formatar_numeros(value):
     return f'{value:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
 
 def obter_colunas_selecionadas(options):
-    # Dicionário de mapeamento entre as opções do multiselect e as colunas do dataset
+    
     colunas = {
         "Condomínio": 'condomínio (R$)',
         "Aluguel": 'aluguel (R$)',
@@ -150,7 +153,7 @@ def obter_colunas_selecionadas(options):
         "Total": 'total (R$)'
     }
     
-    # Criar a lista de colunas com base nas opções selecionadas
+    
     colunas_selecionadas = [colunas[opt] for opt in options]
     
     return colunas_selecionadas
@@ -273,7 +276,7 @@ with tab1:
             mean_values_by_city = data.groupby('cidade')[obter_colunas_selecionadas(options)].mean().reset_index()
 
             
-            # Criar o gráfico de barras
+            
             fig, ax = plt.subplots(figsize=(12, 6))
             mean_values_by_city.plot(kind='bar', ax=ax)
             ax.set_title('Valores Médios de Aluguel por Cidade')
@@ -294,11 +297,11 @@ with tab1:
                 #print(filtros_string)
                 if filtros_string != "":                
                     data = data.query(filtros_string) 
-        # Gráfico de barras para a média de aluguel por cidade
+        
             mean_values_by_city = data.groupby('cidade')[obter_colunas_selecionadas(options)].min().reset_index()
 
             
-            # Criar o gráfico de barras
+           
             fig, ax = plt.subplots(figsize=(12, 6))
             mean_values_by_city.plot(kind='bar', ax=ax)
             ax.set_title('Valores mínimos de Aluguel por Cidade')
@@ -321,11 +324,11 @@ with tab1:
                 #print(filtros_string)
                 if filtros_string != "":                
                     data = data.query(filtros_string) 
-        # Gráfico de barras para a média de aluguel por cidade
+        
             mean_values_by_city = data.groupby('cidade')[obter_colunas_selecionadas(options)].max().reset_index()
 
             
-            # Criar o gráfico de barras
+            
             fig, ax = plt.subplots(figsize=(12, 6))
             mean_values_by_city.plot(kind='bar', ax=ax)
             ax.set_title('Valores Máximos de Aluguel por Cidade')
@@ -357,12 +360,12 @@ with tab1:
         fig1, ax1 = plt.subplots(figsize=(12, 6))
         data.boxplot(column='aluguel (R$)', by='cidade', grid=False, ax=ax1)
         ax1.set_title('Distribuição dos Valores de Aluguel por Cidade')
-        plt.suptitle('')  # Remover o título automático gerado pelo pandas
+        plt.suptitle('')  
         ax1.set_xlabel('Cidade')
         ax1.set_ylabel('Aluguel (R$)')
         #plt.xticks(rotation=45)
 
-        # Exibir o gráfico no Streamlit
+       
         st.pyplot(fig1)
                     
     with col2:
